@@ -27,20 +27,19 @@ enum layers {
 #define MAGIC QK_AREP
 
 //[LAYERS]
-#define TG_EN   TG(EN)
-#define TG_RU   TG(RU)
-#define TG_SYM  TG(SYM)
-#define TG_NAV  TG(NAV)
-#define TG_NUM  TG(NUM)
-#define TG_WIN  TG(WIN)
-#define TG_FUN  TG(FUN)
-#define TG_EXT  TG(EXT)
-#define TO_MAG  TO(MAG)
-#define TG_MAG  TG(MAG)
+#define TO_SYM  TO(SYM)
+#define TO_NAV  TO(NAV)
+#define TO_NUM  TO(NUM)
+#define TO_WIN  TO(WIN)
+#define TO_FUN  TO(FUN)
+#define TO_EXT  TO(EXT)
+#define TO_GAM  TO(GAM)
 #define TG_GAM  TG(GAM)
+#define TO_FAC  TO(FAC)
 #define TG_FAC  TG(FAC)
 #define DF_EN   DF(EN)
 #define DF_RU   DF(RU)
+#define TG_MAG  TG(MAG)
 #define OSL_MAG OSL(MAG)
 
 //[HRM_EN]
@@ -89,21 +88,15 @@ enum layers {
 #define SEL_ALL C(KC_A)
 #define SAVE    C(KC_S)
 #define UNDO    C(KC_Z)
-#define REDO    C(S(KC_Z))
 #define REP_SEL C(KC_H)
 
 //[BROWSER]
-#define RPN_BTB C(S(KC_T))
 #define NEW_BTB C(KC_T)
-#define BKW_BTB C(S(KC_TAB))
-#define FWD_BTB C(KC_TAB)
 
 //[WINDOWS]
 #define EXP_TAB G(KC_TAB)
 #define BWD_TAB S(A(KC_TAB))
 #define FWD_TAB A(KC_TAB)
-#define BKW_DKP C(G(KC_LEFT))
-#define FWD_DKP C(G(KC_RGHT))
 #define CLOSE   A(KC_F4)
 #define APP_SCH A(KC_SPC)
 #define OPTIONS G(KC_A)

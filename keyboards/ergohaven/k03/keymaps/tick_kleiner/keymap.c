@@ -36,91 +36,91 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     XXXXXXX   , KC_GRV  , KC_LABK , KC_RABK , KC_MINS , KC_PIPE ,
     XXXXXXX   , KC_EXLM , KC_ASTR , NAV_SLS , NAV_EQL , KC_AMPR ,
     XXXXXXX   , KC_TILD , KC_PLUS , KC_LBRC , KC_RBRC , KC_PERC , XXXXXXX ,
-                          XXXXXXX , _______ , _______ , _______ , _______ ,
+                          _______ , _______ , _______ , _______ , _______ ,
 
                 _______ , _______ , _______ , _______ , _______ , _______ ,
                 KC_QUES , KC_LCBR , KC_RCBR , KC_DLR  , KC_CIRC , XXXXXXX ,
                 KC_HASH , KC_LPRN , KC_RPRN , KC_SCLN , KC_DQUO , XXXXXXX ,
     XXXXXXX   , KC_AT   , KC_COLN , KC_COMM , KC_DOT  , KC_QUOT , XXXXXXX ,
-    _______   , _______ , _______ , _______ , XXXXXXX
+    _______   , _______ , _______ , _______ , _______
 ),
 [NAV] = LAYOUT_LR(
     _______   , _______ , _______ , _______ , _______ , _______ ,
     _______   , G(KC_B) , G(KC_A) , G(KC_X) , XXXXXXX , XXXXXXX ,
     KC_WREF   , KC_LALT , KC_LCTL , KC_LSFT , XXXXXXX , XXXXXXX ,
     _______   , KC_LGUI , PRV_TAB , NXT_TAB , XXXXXXX , XXXXXXX , XXXXXXX ,
-                          XXXXXXX , _______ , KC_WBAK , _______ , _______ ,
+                          _______ , _______ , KC_WBAK , _______ , _______ ,
 
                 _______ , _______ , _______ , _______ , _______ , _______ ,
                 KC_PGUP , KC_HOME , KC_UP   , KC_END  , SRCHSEL , _______ ,
                 KC_PGDN , KC_LEFT , KC_DOWN , KC_RGHT , REP_SEL , _______ ,
     XXXXXXX   , KC_APP  , SELWBAK , SELLINE , SELWFWD , G(KC_T) , _______ ,
-    _______   , C(KC_T) , _______ , QK_LLCK , XXXXXXX
+    _______   , C(KC_T) , _______ , QK_LLCK , _______
 ),
 [NUM] = LAYOUT_LR(
     _______   , _______ , _______ , _______ , _______ , _______ ,
     _______   , KC_SLSH , KC_9    , KC_8    , KC_7    , KC_ASTR ,
     _______   , KC_MINS , KC_3    , KC_2    , KC_1    , KC_PLUS ,
     _______   , KC_X    , KC_6    , KC_5    , KC_4    , KC_PERC , XXXXXXX ,
-                          XXXXXXX , _______ , _______ , _______ , _______ ,
+                          _______ , _______ , _______ , _______ , _______ ,
 
                 _______ , _______ , _______ , _______ , _______ , _______ ,
                 XXXXXXX , XXXXXXX , KC_CALC , XXXXXXX , XXXXXXX , _______ ,
                 XXXXXXX , XXXXXXX , KC_E    , KC_RCTL , KC_LALT , _______ ,
     XXXXXXX   , XXXXXXX , XXXXXXX , KC_COMM , KC_DOT  , KC_LGUI , _______ ,
-    _______   , KC_0    , _______ , QK_LLCK , XXXXXXX
+    _______   , KC_0    , _______ , QK_LLCK , _______
 ),
 [WIN] = LAYOUT_LR(
     _______   , _______ , _______ , _______ , _______ , _______ ,
     XXXXXXX   , XXXXXXX , KC_MUTE , KC_VOLD , KC_VOLU , MUTEMIC ,
     XXXXXXX   , XXXXXXX , G(KC_3) , G(KC_2) , G(KC_1) , G(KC_D) ,
     XXXXXXX   , XXXXXXX , G(KC_6) , G(KC_5) , G(KC_4) , G(KC_S) , XXXXXXX ,
-                          XXXXXXX , _______ , _______ , _______ , _______ ,
+                          _______ , _______ , _______ , _______ , _______ ,
 
                 _______ , _______ , _______ , _______ , _______ , _______ ,
                 XXXXXXX , WIN_LFT , WIN_RGT , XXXXXXX , XXXXXXX , XXXXXXX ,
                 XXXXXXX , XXXXXXX , KC_LSFT , XXXXXXX , KC_LALT , XXXXXXX ,
     XXXXXXX   , XXXXXXX , BWD_TAB , FWD_TAB , XXXXXXX , XXXXXXX , XXXXXXX ,
-    _______   , _______ , _______ , QK_LLCK , XXXXXXX
+    _______   , _______ , _______ , QK_LLCK , _______
 ),
 [FUN] = LAYOUT_LR(
     _______   , _______ , _______ , _______ , _______ , _______ ,
     XXXXXXX   , KC_F12  , KC_F9   , KC_F8   , KC_F7   , OPTS    ,
     XXXXXXX   , KC_F10  , KC_F3   , KC_F2   , KC_F1   , EXPLR   ,
     XXXXXXX   , KC_F11  , KC_F6   , KC_F5   , KC_F4   , KC_MYCM , XXXXXXX ,
-                          XXXXXXX , XXXXXXX , XXXXXXX , TKMGR   , XXXXXXX ,
+                          _______ , XXXXXXX , XXXXXXX , TKMGR   , XXXXXXX ,
 
                 _______ , _______ , _______ , _______ , _______ , _______ ,
                 OSL_MAG , XXXXXXX , KC_WHOM , XXXXXXX , XXXXXXX , XXXXXXX ,
                 XXXXXXX , XXXXXXX , KC_LCTL , KC_LSFT , KC_LALT , XXXXXXX ,
     XXXXXXX   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_LGUI , XXXXXXX ,
-    XXXXXXX   , CLOSE   , XXXXXXX , QK_LLCK , XXXXXXX
+    XXXXXXX   , CLOSE   , XXXXXXX , QK_LLCK , _______
 ),
 [EXT] = LAYOUT_LR(
     _______   , _______ , _______ , _______ , _______ , _______ ,
     _______   , SAVE    , CUT     , SEL_ALL , XXXXXXX , XXXXXXX ,
     KC_WBAK   , KC_LALT , KC_LCTL , KC_LSFT , SELLINE , XXXXXXX ,
     _______   , KC_LGUI , COPY    , PASTE   , XXXXXXX , XXXXXXX , XXXXXXX ,
-                          XXXXXXX , _______ , MS_ACL0 , _______ , _______ ,
+                          _______ , _______ , MS_ACL0 , _______ , _______ ,
 
                 _______ , _______ , _______ , _______ , _______ , _______ ,
                 MS_WHLU , MS_WHLL , MS_UP   , MS_WHLR , SRCHSEL , KC_PSCR ,
                 MS_WHLD , MS_LEFT , MS_DOWN , MS_RGHT , MS_ACL0 , FST_MS  ,
     XXXXXXX   , MS_BTN4 , MS_BTN1 , MS_BTN3 , MS_BTN2 , MS_BTN5 , XXXXXXX ,
-    _______   , MS_BTN1 , _______ , QK_LLCK , XXXXXXX
+    _______   , MS_BTN1 , _______ , QK_LLCK , _______
 ),
 [MAG] = LAYOUT_LR(
     _______   , _______ , _______ , _______ , _______ , _______ ,
     QK_BOOT   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
-    QK_RBT    , XXXXXXX , TG_NUM  , TG_NAV  , TG_SYM  , XXXXXXX ,
-    DB_TOGG   , XXXXXXX , TG_EXT  , TG_FUN  , TG_WIN  , XXXXXXX , XXXXXXX ,
-                          DF_EN   , XXXXXXX , XXXXXXX , TG_GAM  , XXXXXXX ,
+    QK_RBT    , XXXXXXX , TO_NUM  , TO_NAV  , TO_SYM  , XXXXXXX ,
+    DB_TOGG   , XXXXXXX , TO_EXT  , TO_FUN  , TO_WIN  , XXXXXXX , XXXXXXX ,
+                          _______ , XXXXXXX , XXXXXXX , TO_GAM  , XXXXXXX ,
 
                 _______ , _______ , _______ , _______ , _______ , _______ ,
                 TG_MAG  , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
                 XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
     XXXXXXX   , LOCK    , KC_SLEP , XXXXXXX , XXXXXXX , XXXXXXX , KC_PWR  ,
-    XXXXXXX   , TG_FAC  , XXXXXXX , XXXXXXX , DF_RU
+    XXXXXXX   , TO_FAC  , XXXXXXX , XXXXXXX , _______
 ),
 [GAM] = LAYOUT_LR(
     KC_GRV    , KC_1    , KC_2    , KC_3	, KC_4	  , KC_5    ,
