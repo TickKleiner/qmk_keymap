@@ -1,0 +1,38 @@
+{
+    // Unofficially, QMK uses spaces for indentation
+    "editor.insertSpaces": true,
+    // Configure glob patterns for excluding files and folders.
+    "files.exclude": {
+        "**/.build": false,
+        "**/*.hex": false,
+        "**/*.bin": false,
+        "**/*.uf2": false
+    },
+    "files.associations": {
+        "*.h": "c",
+        "*.c": "c",
+        "*.inc": "c",
+        "*.cpp": "cpp",
+        "*.hpp": "cpp",
+        "xstddef": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "ranges": "c"
+    },
+    "[markdown]": {
+        "editor.trimAutoWhitespace": false,
+        "files.trimTrailingWhitespace": false
+    },
+    "[json]": {
+        "editor.formatOnSave": false
+    },
+    "clangd.arguments": [
+        "--header-insertion=never"
+    ],
+    "workbench.colorCustomizations":{
+        "[Abyss]": {
+            "statusBarItem.remoteBackground": "#8827ff",
+        }
+    },
+    "editor.wordWrapColumn": 200,
+}
