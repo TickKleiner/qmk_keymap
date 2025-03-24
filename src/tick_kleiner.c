@@ -65,10 +65,10 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (!layer_word_on) {
             if (layer_word_lng == LNG_1) {
                 set_single_default_layer(RU);
-                layer_on(RU);
+                // layer_on(RU);
             } else if (layer_word_lng == LNG_2) {
                 set_single_default_layer(EN);
-                layer_on(EN);
+                layer_off(RU);
             }
         }
     }
@@ -290,19 +290,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                     if (GLOBAL_STATE->layer == EN) {
                         layer_word_lng = LNG_2;
                         set_single_default_layer(RU);
-                        layer_on(RU);
+                        // layer_on(RU);
                     } else if (GLOBAL_STATE->layer == RU) {
                         layer_word_lng = LNG_1;
                         set_single_default_layer(EN);
-                        layer_on(EN);
+                        layer_off(RU);
                     }
                 } else {
                     if (layer_word_lng == LNG_1) {
                         set_single_default_layer(RU);
-                        layer_on(RU);
+                        // layer_on(RU);
                     } else if (layer_word_lng == LNG_2) {
                         set_single_default_layer(EN);
-                        layer_on(EN);
+                        layer_off(RU);
                     }
                 }
                 return false;
