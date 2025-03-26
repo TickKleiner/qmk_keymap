@@ -110,6 +110,11 @@ enum layers {
 #define WIN_LFT G(S(KC_LEFT))
 #define WIN_RGT G(S(KC_RGHT))
 #define FST_MS  G(S(KC_D))
+#define PRV_DKP  G(C(KC_LEFT))
+#define NXT_DKP  G(C(KC_RGHT))
+#define NEW_DKP  G(C(KC_D))
+#define CLS_DKP  G(C(KC_F4))
+
 
 //[AUDIO]
 #define MUTEMIC KC_F20

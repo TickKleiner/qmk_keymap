@@ -72,16 +72,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 [WIN] = LAYOUT_LR(
     _______   , _______ , _______ , _______ , _______ , _______ ,
-    XXXXXXX   , XXXXXXX , KC_MUTE , KC_VOLD , KC_VOLU , MUTEMIC ,
-    XXXXXXX   , XXXXXXX , G(KC_3) , G(KC_2) , G(KC_1) , G(KC_D) ,
-    XXXXXXX   , XXXXXXX , G(KC_6) , G(KC_5) , G(KC_4) , G(KC_S) , XXXXXXX ,
-                          _______ , _______ , _______ , _______ , _______ ,
+    XXXXXXX   , XXXXXXX , MUTEMIC , KC_VOLD , KC_VOLU , KC_MUTE ,
+    XXXXXXX   , XXXXXXX , G(KC_3) , G(KC_2) , G(KC_1) , NEW_DKP ,
+    XXXXXXX   , XXXXXXX , G(KC_6) , G(KC_5) , G(KC_4) , CLS_DKP , XXXXXXX ,
+                          _______ , _______ , G(KC_S) , _______ , _______ ,
 
                 _______ , _______ , _______ , _______ , _______ , _______ ,
-                XXXXXXX , WIN_LFT , WIN_RGT , XXXXXXX , XXXXXXX , XXXXXXX ,
-                XXXXXXX , XXXXXXX , KC_LSFT , XXXXXXX , KC_LALT , XXXXXXX ,
+                XXXXXXX , PRV_DKP , NXT_DKP , XXXXXXX , XXXXXXX , XXXXXXX ,
+                WIN_LFT , XXXXXXX , KC_LSFT , XXXXXXX , KC_LALT , XXXXXXX ,
     XXXXXXX   , XXXXXXX , BWD_TAB , FWD_TAB , XXXXXXX , XXXXXXX , XXXXXXX ,
-    _______   , _______ , _______ , QK_LLCK , _______
+    _______   , G(KC_D) , _______ , QK_LLCK , _______
 ),
 [FUN] = LAYOUT_LR(
     _______   , _______ , _______ , _______ , _______ , _______ ,
