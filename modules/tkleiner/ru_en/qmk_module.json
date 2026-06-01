@@ -1,0 +1,30 @@
+{
+    "module_name": "RU-EN",
+    "maintainer": "tkleiner",
+    "keycodes": [
+        {
+            "key": "SET_RU_LANGUAGE",
+            "aliases": [
+              "SET_RU"
+            ]
+        },
+        {
+            "key": "SET_EN_LANGUAGE",
+            "aliases": [
+              "SET_EN"
+            ]
+        },
+        {
+            "key": "RU_EN_WORD",
+            "aliases": [
+              "R_E_WRD"
+            ]
+        },
+        {
+            "key": "TOGGLE_LNG",
+            "aliases": [
+              "TG_LNG"
+            ]
+        }
+    ]
+}

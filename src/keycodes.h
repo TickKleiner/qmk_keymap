@@ -2,13 +2,6 @@
 #include "quantum.h"
 #include "keymap_russian.h"
 
-typedef enum {
-    LNG_START,
-    LNG_1      = LNG_START,
-    LNG_2,
-    LNG_END    = LNG_2,
-} language_t;
-
 enum layers {
     EN,
     RU,
@@ -16,6 +9,7 @@ enum layers {
     NAV,
     NUM,
     WIN,
+    MUS,
     FUN,
     EXT,
     MAG,
@@ -27,20 +21,21 @@ enum layers {
 #define MAGIC QK_AREP
 
 //[LAYERS]
+#define DF_EN   DF(EN)
+#define DF_RU   DF(RU)
 #define TO_SYM  TO(SYM)
 #define TO_NAV  TO(NAV)
 #define TO_NUM  TO(NUM)
 #define TO_WIN  TO(WIN)
-#define TO_FUN  TO(FUN)
+#define TO_MUS  TO(MUS)
 #define TO_EXT  TO(EXT)
 #define TO_GAM  TO(GAM)
 #define TG_GAM  TG(GAM)
 #define TO_FAC  TO(FAC)
 #define TG_FAC  TG(FAC)
-#define DF_EN   DF(EN)
-#define DF_RU   DF(RU)
-#define TG_MAG  TG(MAG)
+#define TO_FUN  TO(FUN)
 #define OSL_MAG OSL(MAG)
+#define TG_MAG  TG(MAG)
 
 //[HRM_EN]
 #define ALT_S   LALT_T(KC_S)
@@ -48,6 +43,7 @@ enum layers {
 #define SFT_R   LSFT_T(KC_R)
 #define NAV_D   LT(NAV, KC_D)
 #define GUI_X   LGUI_T(KC_X)
+#define MUS_K   LT(MUS, KC_K)
 #define CTL_G   LCTL_T(KC_G)
 
 #define NUM_N   LT(NUM, KC_N)
@@ -64,6 +60,7 @@ enum layers {
 #define SFT_VE  LSFT_T(RU_VE)
 #define NAV_A   LT(NAV, RU_A)
 #define GUI_YA  LGUI_T(RU_YA)
+#define MUS_CH  LT(MUS, RU_CHE)
 #define CTL_EM  LCTL_T(RU_EM)
 
 #define NUM_O   LT(NUM, RU_O)
@@ -115,6 +112,9 @@ enum layers {
 #define NEW_DKP  G(C(KC_D))
 #define CLS_DKP  G(C(KC_F4))
 
+//[MODS]
+#define L_ACTL  A(KC_LCTL)
+#define L_SCTL  S(KC_LCTL)
 
 //[AUDIO]
 #define MUTEMIC KC_F20
@@ -124,10 +124,9 @@ enum custom_keycodes {
     UPDIR,
     TMUXESC,    /*Enter copy  mode in Tmux.*/
     SRCHSEL,    /*Searches the current selection in a new tab.*/
-    SELLINE,    /*Line selection*/
-    SELWBAK,    /*Backward word selection*/
-    SELWFWD,    /*Forward word selection*/
     LT_WORD,
+    NLK_HLD,
+    SLK_HLD,
     M_THE,      /* *magic*=' '      */
     M_ION,      /* *magic*='i'      */
     M_MENT,     /* *magic*='m'      */

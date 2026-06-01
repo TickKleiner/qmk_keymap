@@ -23,6 +23,7 @@ TAP_DANCE_ENABLE			?= no #(https://docs.qmk.fm/features/tap_dance)
 TRI_LAYER_ENABLE			?= no #(https://docs.qmk.fm/features/tri_layer)
 KEY_LOCK_ENABLE				?= no #(https://docs.qmk.fm/features/key_lock)
 COMBO_ENABLE				?= no #(https://docs.qmk.fm/features/combo)
+ENABLE_CHORDAL_HOLD			?= no
 
 OS_DETECTION_ENABLE			?= no #(https://docs.qmk.fm/features/os_detection)
 SWAP_HANDS_ENABLE			?= no #(https://docs.qmk.fm/features/swap_hands)
@@ -52,45 +53,35 @@ MACROS_ENABLED				?= no #(https://docs.qmk.fm/feature_macros)
 
 #[EXTRA FEATURES]
 #[GETREUER]
-CUSTOM_SHIFT_KEYS_ENABLE	?= no
-KEYCODE_STRING_ENABLE		?= no
-ORBITAL_MOUSE_ENABLE		?= no
-SENTENCE_CASE_ENABLE		?= no
-SELECT_WORD_ENABLE			?= no
+COMMUNITY_MODULE_CUSTOM_SHIFT_KEYS_ENABLE	?= no
+COMMUNITY_MODULE_KEYCODE_STRING_ENABLE		?= no
+COMMUNITY_MODULE_ORBITAL_MOUSE_ENABLE		?= no
+COMMUNITY_MODULE_SENTENCE_CASE_ENABLE		?= no
+COMMUNITY_MODULE_SELECT_WORD_ENABLE			?= no
+
+COMMUNITY_MODULE_RU_EN_ENABLE				?= no
 
 SRC += src/tick_kleiner.c
-SRC += src/features/caps_word.c
-SRC += src/features/chordal_hold.c
-SRC += src/features/keycode_string.c
-SRC += src/features/repeat_key.c
 SRC += src/features/tap_hold.c
 SRC += src/utils/global_state.c
+SRC += src/features/keycode_string.c
+
+
+ifeq ($(strip $(AUTOCORRECT_ENABLE)), yes)
+	OPT_DEFS += -DAUTOCORRECT_ENABLE
+	SRC += src/features/autocorrect.c
+endif
+ifeq ($(strip $(CAPS_WORD_ENABLE)), yes)
+	OPT_DEFS += -DCAPS_WORD_ENABLE
+	SRC += src/features/caps_word.c
+endif
+ifeq ($(strip $(REPEAT_KEY_ENABLE)), yes)
+	OPT_DEFS += -DREPEAT_KEY_ENABLE
+	SRC += src/features/repeat_key.c
+endif
 
 #[EXTRA FEATURES]
 #[GETREUER]
-ifeq ($(strip $(CUSTOM_SHIFT_KEYS_ENABLE)), yes)
-	OPT_DEFS += -DCUSTOM_SHIFT_KEYS_ENABLE
-	SRC += getreuer/features/custom_shift_keys.c
-	SRC += src/features/custom_shift_keys.c
-endif
-
-ifeq ($(strip $(SELECT_WORD_ENABLE)), yes)
-	OPT_DEFS += -DSELECT_WORD_ENABLE
-	SRC += getreuer/features/select_word.c
-endif
-
-ifeq ($(strip $(ORBITAL_MOUSE_ENABLE)), yes)
+ifeq ($(strip $(COMMUNITY_MODULE_ORBITAL_MOUSE_ENABLE)), yes)
 	MOUSE_ENABLE = yes
-	OPT_DEFS += -DORBITAL_MOUSE_ENABLE
-	SRC += getreuer/features/orbital_mouse.c
-endif
-
-ifeq ($(strip $(KEYCODE_STRING_ENABLE)), yes)
-	OPT_DEFS += -DKEYCODE_STRING_ENABLE
-	SRC += getreuer/features/keycode_string.c
-endif
-
-ifeq ($(strip $(SENTENCE_CASE_ENABLE)), yes)
-	OPT_DEFS += -DSENTENCE_CASE_ENABLE
-	SRC += getreuer/features/sentence_case.c
 endif

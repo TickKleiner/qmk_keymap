@@ -2,7 +2,6 @@
 #include "src/keycodes.h"
 
 typedef struct global_state {
-    language_t cur_lng;
     uint8_t layer;
     uint8_t mods;
     uint8_t weak_mods;
@@ -22,5 +21,4 @@ typedef struct global_state {
 
 extern const global_state_t *GLOBAL_STATE;
 
-void set_lng(language_t lng);
 bool pre_process_record_set_state_user(uint16_t keycode, keyrecord_t *record);
