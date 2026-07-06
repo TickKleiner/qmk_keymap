@@ -23,7 +23,6 @@ TAP_DANCE_ENABLE			?= no #(https://docs.qmk.fm/features/tap_dance)
 TRI_LAYER_ENABLE			?= no #(https://docs.qmk.fm/features/tri_layer)
 KEY_LOCK_ENABLE				?= no #(https://docs.qmk.fm/features/key_lock)
 COMBO_ENABLE				?= no #(https://docs.qmk.fm/features/combo)
-ENABLE_CHORDAL_HOLD			?= no
 
 OS_DETECTION_ENABLE			?= no #(https://docs.qmk.fm/features/os_detection)
 SWAP_HANDS_ENABLE			?= no #(https://docs.qmk.fm/features/swap_hands)
@@ -58,6 +57,7 @@ COMMUNITY_MODULE_KEYCODE_STRING_ENABLE		?= no
 COMMUNITY_MODULE_ORBITAL_MOUSE_ENABLE		?= no
 COMMUNITY_MODULE_SENTENCE_CASE_ENABLE		?= no
 COMMUNITY_MODULE_SELECT_WORD_ENABLE			?= no
+COMMUNITY_MODULE_SPECULATIVE_HOLD_ENABLE	?= no
 
 COMMUNITY_MODULE_RU_EN_ENABLE				?= no
 
