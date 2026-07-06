@@ -84,12 +84,10 @@
 // Use Left Ctrl + Right Ctrl to activate the Command feature.
 #define IS_COMMAND() (get_mods() == MOD_MASK_CTRL)
 // -----------------------------------------------------------------------------
-#ifdef COMMUNITY_MODULE_CUSTOM_SHIFT_KEYS_ENABLE
-// Don't apply custom shift keys with mods other than Shift.
-#   define CUSTOM_SHIFT_KEYS_NEGMODS ~MOD_MASK_SHIFT
-// Only apply custom shift keys on EN and WIN.
-#   define CUSTOM_SHIFT_KEYS_LAYER_MASK (1 << 0) | (1 << 5)
-#endif  //* COMMUNITY_MODULE_CUSTOM_SHIFT_KEYS_ENABLE
+#ifdef COMMUNITY_MODULE_LAYER_SHIFT_KEYS_ENABLE
+// Don't apply layer shift keys with mods other than Shift.
+#   define LAYER_SHIFT_KEYS_NEGMODS ~MOD_MASK_SHIFT
+#endif  //* COMMUNITY_MODULE_LAYER_SHIFT_KEYS_ENABLE
 // -----------------------------------------------------------------------------
 #ifdef COMMUNITY_MODULE_ORBITAL_MOUSE_ENABLE
 // Define speed curve for Orbital Mouse.

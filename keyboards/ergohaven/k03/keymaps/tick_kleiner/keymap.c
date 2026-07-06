@@ -2,6 +2,9 @@
 
 #include "layout.h"
 #include "src/keycodes.h"
+#ifdef COMMUNITY_MODULE_LAYER_SHIFT_KEYS_ENABLE
+#    include "layer_shift_keys.h"
+#endif
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -188,14 +191,14 @@ enum combo_names {
 };
 // clang-format off
 combo_t key_combos[] = {
-    [COMBO_CAPS]     = COMBO(CAPS_COMBO,       CW_TOGG),   // J and , => activate Caps Word,
-    [COMBO_J_K]      = COMBO(J_K_COMBO,        KC_BSLS),   // J and K => backslash
-    [COMBO_H_COMM]   = COMBO(H_COMM_COMBO,     KC_QUOT),   // H and , => '
-    [COMBO_COMM_DOT] = COMBO(COMM_DOT_COMBO,   KC_SCLN),   // , and . => ;
-    [COMBO_F_N]      = COMBO(F_N_COMBO,        OSL(FUN)),  // F and N => FUN layer
-    [COMBO_RU_YO]    = COMBO(RU_YO_COMBO,      RU_YO),
-    [COMBO_RU_CAPS]  = COMBO(RU_CAPS_COMBO,    CW_TOGG),
-    [COMBO_RU_EN]    = COMBO(RU_EN_COMBO,      TG_LNG)
+    [COMBO_CAPS]     = COMBO(CAPS_COMBO,     CW_TOGG),   // J and , => activate Caps Word,
+    [COMBO_J_K]      = COMBO(J_K_COMBO,      KC_BSLS),   // J and K => backslash
+    [COMBO_H_COMM]   = COMBO(H_COMM_COMBO,   KC_QUOT),   // H and , => '
+    [COMBO_COMM_DOT] = COMBO(COMM_DOT_COMBO, KC_SCLN),   // , and . => ;
+    [COMBO_F_N]      = COMBO(F_N_COMBO,      OSL(FUN)),  // F and N => FUN layer
+    [COMBO_RU_YO]    = COMBO(RU_YO_COMBO,    RU_YO),
+    [COMBO_RU_CAPS]  = COMBO(RU_CAPS_COMBO,  CW_TOGG),
+    [COMBO_RU_EN]    = COMBO(RU_EN_COMBO,    TG_LNG)
 };
 // clang-format on
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
@@ -218,48 +221,31 @@ bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode
 #endif  //* COMBO_ENABLE
 
 ///////////////////////////////////////////////////////////////////////////////
-// Key Overrides (https://docs.qmk.fm/features/key_overrides) or
-// Custom shift keys (https://getreuer.info/posts/keyboards/custom-shift-keys)
+// Layer-aware custom shift keys.
 ///////////////////////////////////////////////////////////////////////////////
-#ifdef KEY_OVERRIDE_ENABLE
-const key_override_t hrm_dot_key_override =
-    ko_make_basic(MOD_MASK_SHIFT, WIN_DOT, KC_QUES);    // Shift . is ?
-const key_override_t dot_key_override =
-    ko_make_basic(MOD_MASK_SHIFT, KC_DOT, KC_QUES);     // Shift . is ?
-const key_override_t comm_key_override =
-    ko_make_basic(MOD_MASK_SHIFT, KC_COMM, KC_EXLM);    // Shift , is !
-const key_override_t mins_key_override =
-    ko_make_basic(MOD_MASK_SHIFT, KC_MINS, KC_SCLN);    // Shift - is ;
-const key_override_t slsh_key_override =
-    ko_make_basic(MOD_MASK_SHIFT, KC_SLSH, KC_BSLS);    // Shift / is backslash
-const key_override_t lprn_key_override =
-    ko_make_basic(MOD_MASK_SHIFT, KC_LPRN, KC_LCBR);    // Shift ( is {
-const key_override_t rprn_key_override =
-    ko_make_basic(MOD_MASK_SHIFT, KC_RPRN, KC_RCBR);    // Shift ) is }
-const key_override_t mply_key_override =
-    ko_make_basic(MOD_MASK_SHIFT, KC_MPLY, KC_MNXT);    // Shift play is next
-const key_override_t* key_overrides[] = {
-    &hrm_dot_key_override,
-    &dot_key_override,
-    &comm_key_override,
-    &mins_key_override,
-    &slsh_key_override,
-    &lprn_key_override,
-    &rprn_key_override,
-    &mply_key_override,
+#ifdef COMMUNITY_MODULE_LAYER_SHIFT_KEYS_ENABLE
+#    define LAYER_MASK(layer) ((layer_state_t)1 << (layer))
+#    define LAYER_MASKS(a, b) (LAYER_MASK(a) | LAYER_MASK(b))
+
+const layer_shift_key_t layer_shift_keys[] = {
+    {WIN_DOT, KC_NO,   KC_QUES, LAYER_MASKS(EN, WIN)},  /* .      -> ?  */
+    {KC_DOT,  KC_NO,   KC_QUES, LAYER_MASKS(EN, WIN)},  /* .      -> ?  */
+    {KC_COMM, KC_NO,   KC_EXLM, LAYER_MASKS(EN, WIN)},  /* ,      -> !  */
+    {KC_MINS, KC_NO,   KC_SCLN, LAYER_MASKS(EN, WIN)},  /* -      -> ;  */
+    {KC_SLSH, KC_NO,   KC_BSLS, LAYER_MASKS(EN, WIN)},  /* /      -> \  */
+    {KC_LPRN, KC_NO,   KC_LCBR, LAYER_MASKS(EN, WIN)},  /* (      -> {  */
+    {KC_RPRN, KC_NO,   KC_RCBR, LAYER_MASKS(EN, WIN)},  /* )      -> }  */
+    {KC_UNDS, KC_UNDS, KC_MINS, LAYER_MASKS(EN, RU)},   /* _      -> -  */
+    {KC_MPLY, KC_MPLY, KC_MNXT, LAYER_MASKS(EN, RU)},   /* play   -> next */
+    {EXT_COL, KC_COLN, KC_SCLN, LAYER_MASK(EN)},        /* :      -> ;  */
+    {EXT_COL, RU_COLN, RU_SCLN, LAYER_MASK(RU)},        /* :      -> ;  */
+    {KC_MINS, KC_NO,   RU_SCLN, LAYER_MASK(RU)},        /* -      -> ;  */
+    {KC_SLSH, RU_BSLS, RU_SLSH, LAYER_MASK(RU)},        /* \      -> /  */
 };
-#elif defined(COMMUNITY_MODULE_CUSTOM_SHIFT_KEYS_ENABLE)
-const custom_shift_key_t custom_shift_keys[] = {
-    {WIN_DOT, KC_QUES},     /* .    -> ?            */
-    {KC_DOT,  KC_QUES},     /* .    -> ?            */
-    {KC_COMM, KC_EXLM},     /* ,    -> !            */
-    {KC_MINS, KC_SCLN},     /* -    -> ;            */
-    {KC_SLSH, KC_BSLS},     /* /    -> \            */
-    {KC_LPRN, KC_LCBR},     /* (    -> {            */
-    {KC_RPRN, KC_RCBR},     /* )    -> }            */
-    {KC_MPLY, KC_MNXT},     /* Shift play is next   */
-};
-#endif  //* COMMUNITY_MODULE_CUSTOM_SHIFT_KEYS_ENABLE
+
+#    undef LAYER_MASKS
+#    undef LAYER_MASK
+#endif  //* COMMUNITY_MODULE_LAYER_SHIFT_KEYS_ENABLE
 
 ///////////////////////////////////////////////////////////////////////////////
 // Handedness for Chordal Hold (https://github.com/qmk/qmk_firmware/pull/24560)
