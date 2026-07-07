@@ -1,3 +1,5 @@
+#include "keycodes.h"
+#include "keymap_russian.h"
 #include QMK_KEYBOARD_H
 
 #include "layout.h"
@@ -29,7 +31,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                   SET_EN  , CW_TOGG , KC_BSPC , KC_SPC  , KC_DEL    ,
 
                     KC_HOME , KC_LEFT , KC_RGHT , KC_END  , EXP_TAB , KC_MPLY   ,
-                    RU_EN   , RU_GHE  , RU_SHA  , RU_SHCH , RU_ZE   , KC_SLSH   ,
+                    RU_EN   , RU_GHE  , RU_SHA  , RU_SHCH , RU_ZE   , RU_SLSH   ,
                     RU_ER   , NUM_O   , SFT_EL  , SYM_DE  , ALT_ZHE , KC_MINS   ,
     RU_HARD   , RU_TE   , CTL_SFT , RU_BE   , WIN_YU  , GUI_E   , KC_EQL    ,
     KC_ENT    , QK_REP  , KC_ESC  , R_E_WRD , SET_RU
@@ -82,7 +84,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
                     _______ , _______ , _______ , _______ , _______ , _______ ,
                     XXXXXXX , PRV_DKP , NXT_DKP , XXXXXXX , XXXXXXX , XXXXXXX ,
-                    WIN_LFT , XXXXXXX , KC_LSFT , XXXXXXX , KC_LALT , XXXXXXX ,
+                    XXXXXXX , WIN_LFT , KC_LSFT , XXXXXXX , KC_LALT , XXXXXXX ,
     XXXXXXX   , XXXXXXX , BWD_TAB , FWD_TAB , XXXXXXX , XXXXXXX , XXXXXXX ,
     _______   , G(KC_D) , _______ , QK_LLCK , XXXXXXX
 ),
@@ -176,7 +178,7 @@ const uint16_t J_K_COMBO[]      PROGMEM = { KC_J,    KC_K,       COMBO_END };
 const uint16_t H_COMM_COMBO[]   PROGMEM = { CTL_H,   KC_COMM,    COMBO_END };
 const uint16_t COMM_DOT_COMBO[] PROGMEM = { KC_COMM, WIN_DOT,    COMBO_END };
 const uint16_t F_N_COMBO[]      PROGMEM = { KC_F,    NUM_N,      COMBO_END };
-const uint16_t RU_YO_COMBO[]    PROGMEM = { RU_YU,   RU_IE,      COMBO_END};
+const uint16_t RU_YO_COMBO[]    PROGMEM = { RU_KA,   RU_IE,      COMBO_END };
 const uint16_t RU_CAPS_COMBO[]  PROGMEM = { RU_ES,   RU_BE,      COMBO_END };
 const uint16_t RU_EN_COMBO[]    PROGMEM = { SET_RU,  SET_EN,     COMBO_END };
 enum combo_names {
@@ -202,7 +204,7 @@ combo_t key_combos[] = {
 };
 // clang-format on
 bool combo_should_trigger(uint16_t combo_index, combo_t *combo, uint16_t keycode, keyrecord_t *record) {
-    switch (get_highest_layer(layer_state)) {
+    switch (get_highest_layer(layer_state | default_layer_state)) {
         case RU:
             switch (combo_index) {
                 case COMBO_CAPS ... COMBO_F_N:
@@ -240,7 +242,7 @@ const layer_shift_key_t layer_shift_keys[] = {
     {EXT_COL, KC_COLN, KC_SCLN, LAYER_MASK(EN)},        /* :      -> ;  */
     {EXT_COL, RU_COLN, RU_SCLN, LAYER_MASK(RU)},        /* :      -> ;  */
     {KC_MINS, KC_NO,   RU_SCLN, LAYER_MASK(RU)},        /* -      -> ;  */
-    {KC_SLSH, RU_BSLS, RU_SLSH, LAYER_MASK(RU)},        /* \      -> /  */
+    {RU_SLSH, KC_NO,   RU_BSLS, LAYER_MASK(RU)},        /* /      -> \  */
 };
 
 #    undef LAYER_MASKS

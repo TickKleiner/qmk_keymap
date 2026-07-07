@@ -178,6 +178,6 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, u
 
 #ifdef COMMUNITY_MODULE_SPECULATIVE_HOLD_ENABLE
 bool get_speculative_hold(uint16_t keycode, keyrecord_t* record) {
-    return true; // Enable for all mods.
+    return true; // All mods; lone Alt/GUI flashes are suppressed via DUMMY_MOD_NEUTRALIZER_KEYCODE.
 }
 #endif //* COMMUNITY_MODULE_SPECULATIVE_HOLD_ENABLE

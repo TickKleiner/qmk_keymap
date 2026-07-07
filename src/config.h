@@ -10,8 +10,8 @@
 // Unfortunately, some applications drop or misorder fast key events. This is a
 // partial fix to slow down the rate at which macros are sent.
 #define TAP_CODE_DELAY 5
-// RP2040 GPIO settles quickly; keep a small row-unselect delay instead of the QMK 30 us default.
-#define MATRIX_IO_DELAY 5
+// Do NOT lower MATRIX_IO_DELAY below the 30 us default: the matrix column lines need time to
+// recharge after row unselect; 5 us caused phantom presses down the same column on the right half.
 // -----------------------------------------------------------------------------
 #define UNICODE_SELECTED_MODES UNICODE_MODE_WINCOMPOSE
 // -----------------------------------------------------------------------------
@@ -119,6 +119,11 @@
 #endif //*MOUSEKEY_ENABLE
 
 // #define FLOW_TAP_TERM 100
+
+// Speculative hold flashes Alt/GUI on MT press; if the tap is cancelled, Windows would
+// see a lone Alt/Win tap (menu bar / Start menu). Tapping a dummy key in between prevents that.
+#define DUMMY_MOD_NEUTRALIZER_KEYCODE KC_RIGHT_CTRL
+#define MODS_TO_NEUTRALIZE {MOD_BIT(KC_LEFT_ALT), MOD_BIT(KC_LEFT_GUI)}
 
 #ifdef COMMUNITY_MODULE_RU_EN_ENABLE
 #    define RUEN_DEFAULT_LANGUAGE RUEN_EN

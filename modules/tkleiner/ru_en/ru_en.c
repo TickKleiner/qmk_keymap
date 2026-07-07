@@ -298,17 +298,19 @@ static void ru_en_word_off(void) {
 
 // Ручной tap/hold для SET_RU/SET_EN: кастомные кейкоды не получают tap.count от tapping-движка.
 static struct {
-    uint16_t keycode;     // SET_RU/SET_EN, удерживаемый сейчас, или KC_NO
-    uint16_t press_time;  // record->event.time нажатия
-    bool     interrupted; // была ли нажата другая клавиша во время удержания
+    uint16_t keycode;        // SET_RU/SET_EN, удерживаемый сейчас, или KC_NO
+    uint16_t press_time;     // record->event.time нажатия
+    bool     interrupted;    // чужая клавиша нажата И отпущена во время удержания (permissive hold)
+    uint8_t  rolled_presses; // клавиши, нажатые во время удержания и ещё не отпущенные
 } language_key = {.keycode = KC_NO};
 
 static void language_key_press(uint16_t keycode, ruen_language_t target, keyrecord_t *record) {
     if (language_key.keycode != KC_NO) return; // второй SET_* во время удержания игнорируем
     if (ru_en_word_active) ru_en_word_off();   // явная смена языка завершает режим слова
-    language_key.keycode     = keycode;
-    language_key.press_time  = record->event.time;
-    language_key.interrupted = false;
+    language_key.keycode        = keycode;
+    language_key.press_time     = record->event.time;
+    language_key.interrupted    = false;
+    language_key.rolled_presses = 0;
     set_language_register(target); // моментальный эффект сразу при нажатии
 }
 
@@ -403,7 +405,15 @@ bool pre_process_record_ru_en(uint16_t keycode, keyrecord_t *record) {
 
 bool process_record_ru_en(uint16_t keycode, keyrecord_t *record) {
     if (!process_record_ru_en_kb(keycode, record)) return false;
-    if (record->event.pressed && language_key.keycode != KC_NO && keycode != language_key.keycode) language_key.interrupted = true;
+    // Permissive hold: перекат (следующая клавиша нажата, но отпущена уже после SET_*) не отменяет тап;
+    // тап отменяет только полный чужой тап (нажатие+отпускание) во время удержания SET_*.
+    if (language_key.keycode != KC_NO && keycode != language_key.keycode) {
+        if (record->event.pressed) {
+            ++language_key.rolled_presses;
+        } else if (language_key.rolled_presses > 0) {
+            language_key.interrupted = true;
+        }
+    }
     if (is_modifier_or_layer_key(keycode, record)) return true;
     switch (keycode) {
         case SET_RU:
