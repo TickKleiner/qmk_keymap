@@ -50,10 +50,28 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t* record) {
     return 0;
 }
 
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t* record) {
+    // These keys are intentionally used for shortcuts on the same hand. Once
+    // Chordal Hold has accepted the pair, settle the hold on the second key's
+    // press instead of waiting for its release (Permissive Hold) or the term.
+    switch (keycode) {
+        case CTL_G:
+        case CTL_EM:
+        case NAV_D:
+        case NAV_A:
+        case WIN_DOT: // WIN_YU has the same encoded LT keycode.
+        case NAV_SLS:
+        case NAV_EQL:
+            return true;
+    }
+    return false;
+}
+
 #ifdef FLOW_TAP_TERM
 uint16_t get_flow_tap_term(uint16_t keycode, keyrecord_t* record, uint16_t prev_keycode) {
     // Only apply Flow Tap when following a letter key, and not hotkeys.
-    if (get_tap_keycode(prev_keycode) <= KC_Z && (get_mods() & (MOD_MASK_CG | MOD_BIT_LALT)) == 0) {
+    const uint8_t active_mods = get_mods() | get_weak_mods() | get_oneshot_mods() | get_speculative_mods();
+    if (get_tap_keycode(prev_keycode) <= KC_Z && (active_mods & (MOD_MASK_CG | MOD_MASK_ALT)) == 0) {
         switch (get_highest_layer(layer_state)) {
             case RU:
                 switch (keycode) {
@@ -155,7 +173,9 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, u
         case RU:
             switch (tap_hold_keycode) {
                 case NAV_A:
-                    if (other_keycode == RU_TSE || other_keycode == RU_U || other_keycode == RU_PE || other_keycode == RU_CHE || other_keycode == RU_ES) return true;
+                    // Physical NAV shortcut positions: Select all, Undo, Cut,
+                    // Copy, and Paste.
+                    if (other_keycode == RU_SHTI || other_keycode == RU_TSE || other_keycode == RU_U || other_keycode == RU_ES || other_keycode == CTL_EM) return true;
                     break;
                 case NUM_O:
                     if (other_keycode == QK_REP) {
@@ -165,12 +185,18 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, u
                 case WIN_YU:
                     if (other_keycode == CTL_SFT || other_keycode == RU_BE) return true;
                     break;
+                case CTL_EM:
+                    // Same-hand Ctrl+A/S/C/X rolls on the RU alpha layer.
+                    if (other_keycode == ALT_EF || other_keycode == SYM_YRU || other_keycode == RU_ES || other_keycode == MUS_CH) return true;
+                    break;
             }
             break;
         case EN:
             switch (tap_hold_keycode) {
                 case NAV_D:
-                    if (other_keycode == KC_M || other_keycode == KC_L || other_keycode == KC_Y || other_keycode == KC_K || other_keycode == KC_J) return true;
+                    // Physical NAV shortcut positions: Select all, Undo, Cut,
+                    // Copy, and Paste.
+                    if (other_keycode == KC_V || other_keycode == KC_M || other_keycode == KC_L || other_keycode == KC_J || other_keycode == CTL_G) return true;
                     break;
                 case NUM_N: // Allow one-handed N + Repeat chord to type "0" on num layer.
                     if (other_keycode == QK_REP) {
@@ -180,8 +206,8 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, u
                 case WIN_DOT:
                     if (other_keycode == CTL_H || other_keycode == KC_COMM) return true;
                     break;
-                case CTL_G: // Same-hand Ctrl shortcuts: paste/copy/cut without waiting out TAPPING_TERM.
-                    if (other_keycode == KC_V || other_keycode == KC_C || other_keycode == GUI_X) return true;
+                case CTL_G: // Same-hand Ctrl shortcuts without waiting out TAPPING_TERM.
+                    if (other_keycode == KC_V || other_keycode == KC_C || other_keycode == GUI_X || other_keycode == ALT_S) return true;
                     break;
             }
             break;
@@ -195,7 +221,7 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, u
 }
 #endif //* CHORDAL_HOLD
 
-#ifdef COMMUNITY_MODULE_SPECULATIVE_HOLD_ENABLE
+#ifdef SPECULATIVE_HOLD
 // Alt/GUI mod-tap keys of both base layers, by matrix position (same physical keys on EN and RU).
 static bool alt_or_gui_mt_is_down(void) {
     return GLOBAL_STATE->home_held[LEFT_HOME_ROW][PINKY_COL]        // ALT_S  / ALT_EF
@@ -224,8 +250,8 @@ bool get_speculative_hold(uint16_t keycode, keyrecord_t* record) {
     if (mods & 0x10) mods <<= 4; // 5-bit MT mods: bit 4 set means right-hand mods.
     if ((mods & MOD_MASK_SHIFT) && alt_or_gui_mt_is_down()) return false;
     if ((mods & (MOD_MASK_ALT | MOD_MASK_GUI)) && shift_mt_is_down()) return false;
-    const uint8_t all_mods = get_mods() | get_weak_mods() | get_oneshot_mods() | mods;
+    const uint8_t all_mods = get_mods() | get_weak_mods() | get_oneshot_mods() | get_speculative_mods() | mods;
     if ((all_mods & MOD_MASK_ALT) && (all_mods & MOD_MASK_SHIFT)) return false;
     return true;
 }
-#endif //* COMMUNITY_MODULE_SPECULATIVE_HOLD_ENABLE
+#endif //* SPECULATIVE_HOLD

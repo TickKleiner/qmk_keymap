@@ -126,8 +126,8 @@ static void tap_toggle_language_key(void) {
 }
 #endif
 
-static void send_language_key(ruen_language_t language) {
-    if (current_language == language) return;
+static void send_language_key(ruen_language_t language, bool force) {
+    if (!force && current_language == language) return;
 
     switch (language) {
         case RUEN_RU:
@@ -150,7 +150,7 @@ static void send_language_key(ruen_language_t language) {
 }
 
 static void sync_effective_language(void) {
-    send_language_key(effective_language());
+    send_language_key(effective_language(), false);
 }
 
 #if defined(RUEN_RU_LANGUAGE_LAYER) || defined(RUEN_EN_LANGUAGE_LAYER)
@@ -301,6 +301,7 @@ static struct {
     uint16_t keycode;        // SET_RU/SET_EN, удерживаемый сейчас, или KC_NO
     uint16_t press_time;     // record->event.time нажатия
     bool     interrupted;    // чужая клавиша нажата И отпущена во время удержания (permissive hold)
+    bool     resend_on_tap;  // явный tap должен исправить возможную рассинхронизацию с ОС
     uint8_t  rolled_presses; // клавиши, нажатые во время удержания и ещё не отпущенные
 } language_key = {.keycode = KC_NO};
 
@@ -310,6 +311,7 @@ static void language_key_press(uint16_t keycode, ruen_language_t target, keyreco
     language_key.keycode        = keycode;
     language_key.press_time     = record->event.time;
     language_key.interrupted    = false;
+    language_key.resend_on_tap  = current_language == (aux_english_active ? RUEN_EN : target);
     language_key.rolled_presses = 0;
     set_language_register(target); // моментальный эффект сразу при нажатии
 }
@@ -318,7 +320,13 @@ static void language_key_release(uint16_t keycode, ruen_language_t target, keyre
     if (language_key.keycode != keycode) return;
     const bool tapped = !language_key.interrupted && TIMER_DIFF_16(record->event.time, language_key.press_time) < RUEN_TAPPING_TERM;
     // Tap: set_language до unregister — язык уже целевой, sync внутри unregister становится no-op (нет двойной отправки аккорда).
-    if (tapped) set_language(target);
+    if (tapped) {
+        set_language(target);
+        // If the firmware already believed the target language was active on
+        // press, no chord was sent. Repeat the explicit command once so a tap
+        // repairs host/firmware desynchronization.
+        if (language_key.resend_on_tap) send_language_key(effective_language(), true);
+    }
     set_language_unregister();
     language_key.keycode = KC_NO;
 }
@@ -414,6 +422,10 @@ bool process_record_ru_en(uint16_t keycode, keyrecord_t *record) {
             language_key.interrupted = true;
         }
     }
+    // pre_process sees undecided MT/LT records with tap.count == 0. Inspect
+    // them here, after QMK has settled the tap-hold decision, so tapped letters
+    // participate in word mode while actual holds remain ignored.
+    if (ru_en_word_active && record->event.pressed && (IS_QK_MOD_TAP(keycode) || IS_QK_LAYER_TAP(keycode))) process_ru_en_word(keycode, record);
     if (is_modifier_or_layer_key(keycode, record)) return true;
     switch (keycode) {
         case SET_RU:

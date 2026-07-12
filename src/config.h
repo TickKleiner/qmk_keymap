@@ -32,7 +32,7 @@
 // See "hold on other key press" for details
 //* #define HOLD_ON_OTHER_KEY_PRESS
 // enables handling for per key HOLD_ON_OTHER_KEY_PRESS settings
-//* #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
+#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 // -----------------------------------------------------------------------------
 // tap-then-hold timing to use a dual role key to repeat keycode
 // See Quick Tap Term
@@ -118,7 +118,11 @@
 #    define MOUSE_EXTENDED_REPORT
 #endif //*MOUSEKEY_ENABLE
 
-// #define FLOW_TAP_TERM 100
+#define FLOW_TAP_TERM 100
+
+// Apply Mod-Tap modifiers immediately. The per-key callback below prevents
+// combinations that could accidentally send the Windows Alt+Shift hotkey.
+#define SPECULATIVE_HOLD
 
 // Speculative hold flashes Alt/GUI on MT press; if the tap is cancelled, Windows would
 // see a lone Alt/Win tap (menu bar / Start menu). Tapping a dummy key in between prevents that.

@@ -70,9 +70,13 @@ static void sym_hold_off(uint8_t source) {
 static void inject_mod(uint8_t source, uint8_t mod, uint8_t *sources) {
     if (*sources != 0) {
         *sources |= source;
-    } else if ((get_mods() & mod) == 0) {
-        register_mods(mod);
+    } else if (((get_mods() | get_weak_mods()) & mod) == 0) {
+        // Weak mods are independently owned by this injection mechanism. This
+        // avoids unregistering a physically held modifier when the last
+        // injected source is released.
+        add_weak_mods(mod);
         *sources |= source;
+        send_keyboard_report();
     }
 }
 
@@ -80,7 +84,8 @@ static void release_injected_mod(uint8_t source, uint8_t mod, uint8_t *sources) 
     if ((*sources & source) == 0) return;
     *sources &= ~source;
     if (*sources == 0) {
-        unregister_mods(mod);
+        del_weak_mods(mod);
+        send_keyboard_report();
     }
 }
 
