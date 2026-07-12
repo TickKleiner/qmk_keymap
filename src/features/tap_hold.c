@@ -20,30 +20,11 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t* record) {
     // lead to missed triggers in fast typing. Here, returning 0 means we
     // instead want to "force hold" and disable key repeating.
     switch (keycode) {
-        case NUM_N:
-        case NUM_O:
         case CTL_H:
         case CTL_SFT:
             return QUICK_TAP_TERM;
     }
     return 0;
-}
-
-bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t* record) {
-    // These keys are intentionally used for shortcuts on the same hand. Once
-    // Chordal Hold has accepted the pair, settle the hold on the second key's
-    // press instead of waiting for its release (Permissive Hold) or the term.
-    switch (keycode) {
-        case CTL_G:
-        case CTL_EM:
-        case NAV_D:
-        case NAV_A:
-        case WIN_DOT: // WIN_YU has the same encoded LT keycode.
-        case NAV_SLS:
-        case NAV_EQL:
-            return true;
-    }
-    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

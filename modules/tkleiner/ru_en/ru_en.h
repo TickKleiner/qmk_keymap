@@ -30,10 +30,6 @@ typedef enum {
 #    pragma message "RUEN_EN_LANGUAGE_KEY: not set"
 #endif //* RUEN_EN_LANGUAGE_KEY
 
-#ifndef RUEN_TAPPING_TERM
-#    define RUEN_TAPPING_TERM TAPPING_TERM
-#endif //* RUEN_TAPPING_TERM
-
 #ifndef RUEN_TOGGLE_LANGUAGE_MOD_KEY
 #    pragma message "RUEN_TOGGLE_LANGUAGE_MOD_KEY: not_set"
 #    define RUEN_TOGGLE_LANGUAGE_MOD_KEY KC_LALT

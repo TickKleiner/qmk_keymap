@@ -89,6 +89,17 @@ static void release_injected_mod(uint8_t source, uint8_t mod, uint8_t *sources) 
     }
 }
 
+// The core clears all weak mods at the start of every key press event
+// (action.c), so injected weak mods must be re-asserted on each record before
+// the key registers and a report goes out.
+static void reassert_injected_mods(void) {
+    uint8_t mods = 0;
+    if (injected_lctrl_sources) mods |= MOD_BIT_LCTRL;
+    if (injected_lshift_sources) mods |= MOD_BIT_LSHIFT;
+    if (injected_lalt_sources) mods |= MOD_BIT_LALT;
+    if (mods) add_weak_mods(mods);
+}
+
 static void inject_mods(uint8_t source, uint8_t mods) {
     if (mods & MOD_BIT_LCTRL) {
         inject_mod(source, MOD_BIT_LCTRL, &injected_lctrl_sources);
@@ -111,6 +122,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
     pre_process_record_set_state_user(keycode, record);
     if (GLOBAL_STATE->layer == SYM && record->event.pressed) {
         clear_weak_mods();
+        reassert_injected_mods();
         send_keyboard_report();
     }
 
@@ -133,6 +145,7 @@ bool pre_process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     dlog_record(keycode, record);
+    reassert_injected_mods();
     switch (GLOBAL_STATE->layer) {
         case RU:
             switch (keycode) {

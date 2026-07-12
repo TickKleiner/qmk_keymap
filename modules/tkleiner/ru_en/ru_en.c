@@ -299,7 +299,6 @@ static void ru_en_word_off(void) {
 // Ручной tap/hold для SET_RU/SET_EN: кастомные кейкоды не получают tap.count от tapping-движка.
 static struct {
     uint16_t keycode;        // SET_RU/SET_EN, удерживаемый сейчас, или KC_NO
-    uint16_t press_time;     // record->event.time нажатия
     bool     interrupted;    // чужая клавиша нажата И отпущена во время удержания (permissive hold)
     bool     resend_on_tap;  // явный tap должен исправить возможную рассинхронизацию с ОС
     uint8_t  rolled_presses; // клавиши, нажатые во время удержания и ещё не отпущенные
@@ -309,7 +308,6 @@ static void language_key_press(uint16_t keycode, ruen_language_t target, keyreco
     if (language_key.keycode != KC_NO) return; // второй SET_* во время удержания игнорируем
     if (ru_en_word_active) ru_en_word_off();   // явная смена языка завершает режим слова
     language_key.keycode        = keycode;
-    language_key.press_time     = record->event.time;
     language_key.interrupted    = false;
     language_key.resend_on_tap  = current_language == (aux_english_active ? RUEN_EN : target);
     language_key.rolled_presses = 0;
@@ -318,7 +316,10 @@ static void language_key_press(uint16_t keycode, ruen_language_t target, keyreco
 
 static void language_key_release(uint16_t keycode, ruen_language_t target, keyrecord_t *record) {
     if (language_key.keycode != keycode) return;
-    const bool tapped = !language_key.interrupted && TIMER_DIFF_16(record->event.time, language_key.press_time) < RUEN_TAPPING_TERM;
+    // Без таймера: непрерванное удержание любой длительности — осознанное
+    // переключение (momentary hold без набранных клавиш ничего не делает).
+    // Momentary — только если во время удержания реально печатали.
+    const bool tapped = !language_key.interrupted;
     // Tap: set_language до unregister — язык уже целевой, sync внутри unregister становится no-op (нет двойной отправки аккорда).
     if (tapped) {
         set_language(target);

@@ -32,7 +32,7 @@
 // See "hold on other key press" for details
 //* #define HOLD_ON_OTHER_KEY_PRESS
 // enables handling for per key HOLD_ON_OTHER_KEY_PRESS settings
-#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
+//* #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 // -----------------------------------------------------------------------------
 // tap-then-hold timing to use a dual role key to repeat keycode
 // See Quick Tap Term
