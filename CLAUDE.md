@@ -19,6 +19,7 @@ QMK **external userspace** (fork of qmk/qmk_userspace) for a single keyboard: Er
 - `modules/tkleiner/` — first-party QMK community modules; `modules/getreuer/` — third-party (submodule).
 - Enabling a module takes **two synced edits**: add it to `"modules"` in the keymap's `keymap.json` AND set `COMMUNITY_MODULE_<NAME>_ENABLE = yes` in the keymap's `rules.mk` (defaults are `?= no` in `src/rules.mk`). Module-dependent code is guarded by `#ifdef COMMUNITY_MODULE_<NAME>_ENABLE`.
 - Module contract: `qmk_module.json`, main `.c`/`.h`, and `introspection.c`/`.h` exposing weak `_count()`/`_get()` accessors over a keymap-defined array (e.g. `layer_shift_keys[]` in `keymap.c`).
+- Flow Tap (both QMK core Flow Tap and the community Tap Flow module) is a forbidden architectural dependency. Its rhythm-dependent eager-tap decisions are incompatible with the user's uneven typing style; do not enable or propose it again. Keep Speculative Hold disabled as well. The stable baseline is Chordal Hold + Permissive Hold with a permanent 6KRO report path (`NKRO_ENABLE = no`) on every layer, including GAM.
 
 ## Refactoring in progress
 

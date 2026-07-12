@@ -59,6 +59,10 @@ COMMUNITY_MODULE_SENTENCE_CASE_ENABLE		?= no
 COMMUNITY_MODULE_SELECT_WORD_ENABLE			?= no
 COMMUNITY_MODULE_RU_EN_ENABLE				?= no
 
+ifneq ($(filter yes,$(COMMUNITY_MODULE_TAP_FLOW_ENABLE)),)
+$(error Community Tap Flow must remain disabled for this keymap)
+endif
+
 SRC += src/tick_kleiner.c
 SRC += src/features/tap_hold.c
 SRC += src/utils/global_state.c

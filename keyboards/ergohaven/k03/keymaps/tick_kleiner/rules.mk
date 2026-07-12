@@ -8,7 +8,7 @@ RAW_ENABLE					= yes
 COMMAND_ENABLE				= no
 CONSOLE_ENABLE				= no
 LTO_ENABLE					= no
-NKRO_ENABLE					= yes
+NKRO_ENABLE					= no
 
 ENCODER_ENABLE				= no
 ENCODER_MAP_ENABLE			= no
