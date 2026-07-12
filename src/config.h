@@ -123,7 +123,10 @@
 // Speculative hold flashes Alt/GUI on MT press; if the tap is cancelled, Windows would
 // see a lone Alt/Win tap (menu bar / Start menu). Tapping a dummy key in between prevents that.
 // Must NOT be a modifier: a dummy RCtrl tap would release a really-held RCTL_T mod (CTL_H).
-#define DUMMY_MOD_NEUTRALIZER_KEYCODE KC_F18
+// Must NOT be an F-key: the dummy is tapped while Alt is still down, and terminals encode
+// Alt+F13..F24 as CSI escape sequences, printing junk like ";3~". KC_INT4 (JIS Henkan,
+// VK_CONVERT on Windows) has no terminal mapping and does nothing without a Japanese IME.
+#define DUMMY_MOD_NEUTRALIZER_KEYCODE KC_INT4
 #define MODS_TO_NEUTRALIZE {MOD_BIT(KC_LEFT_ALT), MOD_BIT(KC_LEFT_GUI)}
 
 #ifdef COMMUNITY_MODULE_RU_EN_ENABLE

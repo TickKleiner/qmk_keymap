@@ -1,4 +1,6 @@
 #include "src/keycodes.h"
+#include "src/utils/global_state.h"
+#include "layout.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Tap-hold configuration (https://docs.qmk.fm/tap_hold)
@@ -134,7 +136,21 @@ uint16_t get_tap_flow_term(uint16_t keycode, keyrecord_t* record, uint16_t prev_
 // Handedness for Chordal Hold (https://github.com/qmk/qmk_firmware/pull/24560)
 ///////////////////////////////////////////////////////////////////////////////
 #ifdef CHORDAL_HOLD
+static uint8_t mt_mods(uint16_t keycode) {
+    uint8_t mods = QK_MOD_TAP_GET_MODS(keycode);
+    if (mods & 0x10) mods <<= 4; // 5-bit MT mods: bit 4 set means right-hand mods.
+    return mods;
+}
+
 bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, uint16_t other_keycode, keyrecord_t* other_record) {
+    // A Shift MT never chords with an Alt/GUI MT, in either order: if both settled as held
+    // (permissive hold, or the chordal queue scan settling a second queued MT as held),
+    // Alt+Shift lands in a report = Windows layout-switch hotkey. Such rolls are always taps.
+    if (IS_QK_MOD_TAP(tap_hold_keycode) && IS_QK_MOD_TAP(other_keycode)) {
+        const uint8_t a = mt_mods(tap_hold_keycode);
+        const uint8_t b = mt_mods(other_keycode);
+        if (((a & MOD_MASK_SHIFT) && (b & (MOD_MASK_ALT | MOD_MASK_GUI))) || ((b & MOD_MASK_SHIFT) && (a & (MOD_MASK_ALT | MOD_MASK_GUI)))) return false;
+    }
     switch (get_highest_layer(layer_state)) {
         case RU:
             switch (tap_hold_keycode) {
@@ -164,6 +180,9 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, u
                 case WIN_DOT:
                     if (other_keycode == CTL_H || other_keycode == KC_COMM) return true;
                     break;
+                case CTL_G: // Same-hand Ctrl shortcuts: paste/copy/cut without waiting out TAPPING_TERM.
+                    if (other_keycode == KC_V || other_keycode == KC_C || other_keycode == GUI_X) return true;
+                    break;
             }
             break;
         case NAV:
@@ -177,7 +196,36 @@ bool get_chordal_hold(uint16_t tap_hold_keycode, keyrecord_t* tap_hold_record, u
 #endif //* CHORDAL_HOLD
 
 #ifdef COMMUNITY_MODULE_SPECULATIVE_HOLD_ENABLE
+// Alt/GUI mod-tap keys of both base layers, by matrix position (same physical keys on EN and RU).
+static bool alt_or_gui_mt_is_down(void) {
+    return GLOBAL_STATE->home_held[LEFT_HOME_ROW][PINKY_COL]        // ALT_S  / ALT_EF
+           || GLOBAL_STATE->home_held[LEFT_BOTTOM_ROW][PINKY_COL]   // GUI_X  / GUI_YA
+           || GLOBAL_STATE->home_held[RIGHT_HOME_ROW][PINKY_COL]    // ALT_I  / ALT_ZHE
+           || GLOBAL_STATE->home_held[RIGHT_BOTTOM_ROW][RING_COL]   // WIN_DOT / WIN_YU
+           || GLOBAL_STATE->home_held[RIGHT_BOTTOM_ROW][PINKY_COL]; // GUI_QUO / GUI_E
+}
+
+// Shift mod-tap keys of both base layers, by matrix position.
+static bool shift_mt_is_down(void) {
+    return GLOBAL_STATE->home_held[LEFT_HOME_ROW][MIDDLE_COL]      // SFT_R / SFT_VE
+           || GLOBAL_STATE->home_held[RIGHT_HOME_ROW][MIDDLE_COL]; // SFT_E / SFT_EL
+}
+
+// All mods are speculative (lone Alt/GUI flashes are suppressed via DUMMY_MOD_NEUTRALIZER_KEYCODE),
+// except combinations that could put Alt+Shift in a report: that is the Windows layout-switch
+// hotkey, and a spurious flash both switches the OS language and desyncs ru_en's current_language.
+// Two ways it can happen:
+//  * the new mod plus already-active mods (real, weak or one-shot) combines Alt with Shift;
+//  * a Shift MT flashes while an Alt/GUI MT is still physically down and unsettled (or vice
+//    versa): if the other MT later settles as hold (permissive hold in a roll like "ir" or
+//    "ei"), the real mod joins the still-flashed speculative one.
 bool get_speculative_hold(uint16_t keycode, keyrecord_t* record) {
-    return true; // All mods; lone Alt/GUI flashes are suppressed via DUMMY_MOD_NEUTRALIZER_KEYCODE.
+    uint8_t mods = QK_MOD_TAP_GET_MODS(keycode);
+    if (mods & 0x10) mods <<= 4; // 5-bit MT mods: bit 4 set means right-hand mods.
+    if ((mods & MOD_MASK_SHIFT) && alt_or_gui_mt_is_down()) return false;
+    if ((mods & (MOD_MASK_ALT | MOD_MASK_GUI)) && shift_mt_is_down()) return false;
+    const uint8_t all_mods = get_mods() | get_weak_mods() | get_oneshot_mods() | mods;
+    if ((all_mods & MOD_MASK_ALT) && (all_mods & MOD_MASK_SHIFT)) return false;
+    return true;
 }
 #endif //* COMMUNITY_MODULE_SPECULATIVE_HOLD_ENABLE
